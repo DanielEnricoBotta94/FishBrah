@@ -23,8 +23,10 @@ public class KeyboardService : IKeyboardService
             .KeyUp(VirtualKeyCode.VK_1);
     }
 
-    public void ClickAndLoot(int x, int y)
+    public async Task ClickAndLoot(int x, int y)
     {
+        var delay = _randomService.Generate(500, 1000);
+        await Task.Delay(delay);
         new InputSimulator().Keyboard
             .KeyDown(VirtualKeyCode.SHIFT)
             .Mouse

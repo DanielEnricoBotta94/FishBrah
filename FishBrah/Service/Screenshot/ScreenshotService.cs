@@ -71,7 +71,10 @@ public class ScreenshotService : IScreenshotService
                 if (difference < DifferenceTreshold) 
                     continue;
                 
-                var tuple = ImageHelper.GetAdjustedDifference(current, i, j);
+                var tuple = ImageHelper
+                    .GetAdjustedDifference(current, i, j)
+                    .MapToUShortTuple(current.Original);
+                
                 differences.Add(tuple);
             }
         }

@@ -10,20 +10,17 @@ public class FishImage : IDisposable
 {
     private readonly MagickImage _image;
 
-    public Rectangle Original;
-    public Rectangle Scaled;
+    public readonly Rectangle Original;
+    public readonly Rectangle Scaled;
 
+    private const int ScaleWidth = 200;
     public FishImage(string path)
     {
         _image = new MagickImage(path);
         Original = new Rectangle(_image.Width, _image.Height);
-        this.PrepareImage();
-    }
-
-    public void Scale(Rectangle rect)
-    {
-        Scaled = rect;
-        _image.Scale(rect.Width, rect.Height);
+        var height = ScaleWidth * Original.Height / Original.Width;
+        Scaled = new Rectangle(ScaleWidth, height);
+        _image.Scale(Scaled.Width, Scaled.Height);
     }
 
     public IPixelCollection<ushort> GetPixels()

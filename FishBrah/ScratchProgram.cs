@@ -9,18 +9,6 @@ public class bingobongo
 {
     public async Task bannana()
     {
-        while (true)
-        {
-            using var enumerator = new MMDeviceEnumerator();
-            var device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Console);
-            using var meter = AudioMeterInformation.FromDevice(device);
-            Console.WriteLine(meter.PeakValue);
-            if (meter.PeakValue > 0.99)
-                return;
-            await Task.Delay(20);
-        }
-
-
         var max = 0;
 
         void SetDiff(IPixelCollection<ushort> pixelCollection, int i1, int i2, ushort diff)

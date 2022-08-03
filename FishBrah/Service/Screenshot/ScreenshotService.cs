@@ -1,9 +1,11 @@
 using System.Drawing;
+using System.Drawing.Imaging;
 using FishBrah.Extensions;
 using FishBrah.Helpers;
 using FishBrah.Service.Cancellation;
 using FishBrah.Service.Random;
 using ImageMagick;
+using ImageMagick.Configuration;
 
 namespace FishBrah.Service.Screenshot;
 
@@ -25,27 +27,27 @@ public class ScreenshotService : IScreenshotService
 
     public async Task CaptureAsync()
     {
-        var delay = _randomService.Generate(500);
+        var delay = _randomService.Generate(500, 1000);
         await Task.Delay(delay, _cancellationTokenService.Get(this).Token);
-        var bitmap = GetBitmap();
+        using var bitmap = GetBitmap();
         SetCurrentAndPrevious(bitmap);
     }
 
     private static Bitmap GetBitmap()
     {
-        using var bitmap = new Bitmap(1366, 768);
+        var bitmap = new Bitmap(1366, 768);
         using var g = Graphics.FromImage(bitmap);
         var size = new Size(1366, 768);
         g.CopyFromScreen(0, 0, 0, 0, size, CopyPixelOperation.SourceCopy);
         return bitmap;
     }
     
-    private void SetCurrentAndPrevious(Image bitmap)
+    private void SetCurrentAndPrevious(Bitmap bitmap)
     {
         _previous?.Delete();
         _previous = _current;
-        _current = new FileInfo($"{_randomService.Generate(int.MaxValue)}.png");
-        bitmap.Save(_current.FullName);
+        _current = new FileInfo($"{_randomService.Generate(int.MaxValue)}.jpg");
+        bitmap.Save(_current.Name, ImageFormat.Png);
     }
 
     public (uint x, uint y)[] GetDifferencesAsync()

@@ -22,7 +22,7 @@ public class FishHandler : IFishHandler
     {
         _audioListenerService.OnFishDetect += Reel;
         await _screenshotService.CaptureAsync();
-        _keyboardService.PressOne();
+        await _keyboardService.PressOne();
         await _screenshotService.CaptureAsync();
     }
 

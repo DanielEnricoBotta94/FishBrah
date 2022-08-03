@@ -2,6 +2,6 @@ namespace FishBrah.Service.Keyboard;
 
 public interface IKeyboardService
 {
-    void PressOne();
+    Task PressOne();
     void ClickAndLoot(uint x, uint y);
 }

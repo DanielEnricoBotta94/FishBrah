@@ -27,6 +27,7 @@ public class AudioListenerService : IAudioListenerService
         while (!tokenSource?.IsCancellationRequested ?? false)
         {
             if (meter.PeakValue > FishThreshold) OnFishDetect?.Invoke();
+            Console.WriteLine(meter.PeakValue);
             await Task.Delay(ListenInterval, tokenSource.Token);
         }
     }

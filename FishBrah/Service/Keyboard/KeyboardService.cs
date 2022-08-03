@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using FishBrah.Service.Random;
 
 namespace FishBrah.Service.Keyboard;
 
@@ -8,8 +9,17 @@ public class KeyboardService : IKeyboardService
     private const int KEYBOARD_SHIFT = 0xA0;
     private const int KEYBOARD_ONE = 0x31;
 
-    public void PressOne()
+    private readonly IRandomService _randomService;
+
+    public KeyboardService(IRandomService randomService)
     {
+        _randomService = randomService;
+    }
+
+    public async Task PressOne()
+    {
+        var delay = _randomService.Generate(500, 1000);
+        await Task.Delay(delay);
         keybd_event(KEYBOARD_ONE, 0, 0, 0);
     }
 

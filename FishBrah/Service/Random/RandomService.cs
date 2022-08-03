@@ -8,4 +8,9 @@ public class RandomService : IRandomService
     {
         return _random.Next(max);
     }
+    
+    public int Generate(int min, int max)
+    {
+        return _random.Next(min, max);
+    }
 }

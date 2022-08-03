@@ -3,5 +3,5 @@ namespace FishBrah.Service.Screenshot;
 public interface IScreenshotService
 {
     Task CaptureAsync();
-    (uint x, uint y)[] GetDifferencesAsync();
+    (int x, int y)[] GetDifferencesAsync();
 }

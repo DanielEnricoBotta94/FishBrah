@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using FishBrah.Extensions;
 using FishBrah.Helpers;
+using FishBrah.Models;
 using FishBrah.Service.Cancellation;
 using FishBrah.Service.Random;
 using ImageMagick;
@@ -47,32 +48,31 @@ public class ScreenshotService : IScreenshotService
         _previous?.Delete();
         _previous = _current;
         _current = new FileInfo($"{_randomService.Generate(int.MaxValue)}.jpg");
-        bitmap.Save(_current.Name, ImageFormat.Png);
+        bitmap.Save(_current.FullName, ImageFormat.Png);
     }
 
-    public (uint x, uint y)[] GetDifferencesAsync()
+    public (int x, int y)[] GetDifferencesAsync()
     {
-        var differences = new List<(uint, uint)>();
+        var differences = new List<(int, int)>();
 
         if (_previous is null || _current is null)
-            return Array.Empty<(uint x, uint y)>();
+            return Array.Empty<(int x, int y)>();
         
-        var previous = ImageHelper.PrepareImage(_previous.FullName);
-        var current = ImageHelper.PrepareImage(_current.FullName);
+        using var previous = new FishImage(_previous.FullName);
+        using var current = new FishImage(_current.FullName);
 
         using var previousPixels = previous.GetPixels();
         using var currentPixels = current.GetPixels();
-        for (var i = 0; i < previous.Width - 1; i++)
+        for (var i = 0; i < previous.Scaled.Width - 1; i++)
         {
-            for (var j = 0; j < current.Height - 1; j++)
+            for (var j = 0; j < current.Scaled.Height - 1; j++)
             {
                 var difference = (ushort)Math.Abs(previousPixels[i, j]!.ToColor()!.B - currentPixels[i, j]!.ToColor()!.B);
                 if (difference < DifferenceTreshold) 
                     continue;
                 
-                var tuple = ((uint)i, (uint)j);
+                var tuple = ImageHelper.GetAdjustedDifference(current, i, j);
                 differences.Add(tuple);
-                //SetDiff(
             }
         }
 

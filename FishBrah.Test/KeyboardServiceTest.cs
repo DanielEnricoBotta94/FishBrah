@@ -4,10 +4,10 @@ using Moq;
 
 namespace FishBrah.Test;
 
-public class UnitTest1
+public class KeyboardServiceTest
 {
     [Fact]
-    public async Task KeyboardServiceTest()
+    public async Task KeyboardService_Base()
     {
         var random = new Mock<IRandomService>();
         random.Setup(s => s.Generate(
@@ -15,6 +15,10 @@ public class UnitTest1
             It.IsAny<int>())
         ).Returns(1000);
         var service = new KeyboardService(random.Object);
+        await service.PressOne();
+        await service.PressOne();
+        await service.PressOne();
+        await service.PressOne();
         await service.PressOne();
     }
 }

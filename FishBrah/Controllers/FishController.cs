@@ -16,7 +16,7 @@ public static class PopupControllerExt
             await Task.Delay(5000);
             Console.WriteLine("started");
             await fishHandler.FishAsync();
-            _ = Task.Run(audioListenerService.Listen, request.HttpContext.RequestAborted);
+            _ = Task.Run(audioListenerService.Listen);
             return Results.Ok();
         });
         

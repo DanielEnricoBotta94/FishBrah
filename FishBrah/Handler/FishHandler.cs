@@ -30,7 +30,7 @@ public class FishHandler : IFishHandler
     {
         var coordinates = _screenshotService.GetDifferencesAsync();
         for (var i = 0; i < coordinates.Length; i++) _keyboardService.ClickAndLoot(coordinates[i].x, coordinates[i].y);
-        _audioListenerService.OnFishDetect -= Reel;
+        //_audioListenerService.OnFishDetect -= Reel;
     }
 
     public void Cancel()

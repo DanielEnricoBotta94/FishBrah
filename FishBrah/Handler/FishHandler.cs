@@ -4,13 +4,14 @@ using FishBrah.Service.Screenshot;
 
 namespace FishBrah.Handler;
 
-public class FIshHandler: IFishHandler
+public class FishHandler : IFishHandler
 {
+    private readonly IAudioListenerService _audioListenerService;
     private readonly IKeyboardService _keyboardService;
     private readonly IScreenshotService _screenshotService;
-    private readonly IAudioListenerService _audioListenerService;
 
-    public FIshHandler(IKeyboardService keyboardService, IScreenshotService screenshotService, IAudioListenerService audioListenerService)
+    public FishHandler(IKeyboardService keyboardService, IScreenshotService screenshotService,
+        IAudioListenerService audioListenerService)
     {
         _keyboardService = keyboardService;
         _screenshotService = screenshotService;
@@ -27,12 +28,13 @@ public class FIshHandler: IFishHandler
 
     public void Reel()
     {
-        var coordinates = _screenshotService.GetDifferences();
-        for (var i = 0; i <coordinates.Length; i++)
-        {
-            _keyboardService.ClickAndLoot(coordinates[i].x, coordinates[i].y);
-        }
+        var coordinates = _screenshotService.GetDifferencesAsync();
+        for (var i = 0; i < coordinates.Length; i++) _keyboardService.ClickAndLoot(coordinates[i].x, coordinates[i].y);
+        _audioListenerService.OnFishDetect -= Reel;
+    }
 
+    public void Cancel()
+    {
         _audioListenerService.OnFishDetect -= Reel;
     }
 }

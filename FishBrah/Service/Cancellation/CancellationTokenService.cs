@@ -4,8 +4,8 @@ namespace FishBrah.Service.Cancellation;
 
 public class CancellationTokenService : ICancellationTokenService
 {
-    private readonly CancellationTokenSource _cancellationTokenSource;
     private readonly MemoryCache _cache = new(new MemoryCacheOptions());
+    private readonly CancellationTokenSource _cancellationTokenSource;
 
     public CancellationTokenService(CancellationTokenSource cancellationTokenSource)
     {

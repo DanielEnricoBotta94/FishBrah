@@ -8,15 +8,15 @@ public class AudioListenerService : IAudioListenerService
 {
     private const double FishThreshold = 0.99;
     private const int ListenInterval = 100;
-    
+
     private readonly ICancellationTokenService _cancellationTokenService;
 
-    public event FishDelegates.FishDetect? OnFishDetect;
-    
     public AudioListenerService(ICancellationTokenService cancellationTokenService)
     {
         _cancellationTokenService = cancellationTokenService;
     }
+
+    public event FishDelegates.FishDetect? OnFishDetect;
 
     public async Task Listen()
     {
@@ -26,10 +26,7 @@ public class AudioListenerService : IAudioListenerService
         var tokenSource = _cancellationTokenService.Get(this);
         while (!tokenSource?.IsCancellationRequested ?? false)
         {
-            if (meter.PeakValue > FishThreshold)
-            {
-                OnFishDetect?.Invoke();
-            }
+            if (meter.PeakValue > FishThreshold) OnFishDetect?.Invoke();
             await Task.Delay(ListenInterval, tokenSource.Token);
         }
     }
